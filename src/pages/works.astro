@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getWorks } from "../library/microcms";
+
+// MicroCMSから記事を取得
+const response = await getWorks({ fields: ["id", "title", "thumbnail", "tags", "url"] });
+const works = response.contents;
+---
+
+<Layout>
+    <!-- Clouds Background -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="cloud absolute top-20 right-[20%] w-32 h-12 bg-white rounded-full opacity-60 animate-float-slow"></div>
+        <div class="cloud absolute top-60 left-[10%] w-24 h-10 bg-white rounded-full opacity-50 animate-float-medium"></div>
+    </div>
+
+    <main class="container mx-auto p-4 md:p-8 max-w-6xl relative z-10 pt-24">
+        <h1 class="text-4xl text-white font-bold drop-shadow-md mb-12 text-center">My Works</h1>
+        
+        {works.length === 0 ? (
+            <div class="bg-white/80 p-8 rounded-lg shadow-sm text-center">
+                <p class="text-lg text-choco">No projects found.</p>
+            </div>
+        ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {works.map((work) => (
+                    <article class="bg-white rounded-xl overflow-hidden border-4 border-white shadow-lg hover:translate-y-[-5px] transition-transform duration-300 group">
+                        <a href={work.url ? work.url : `/works/${work.id}`} target={work.url ? "_blank" : "_self"} rel="noopener noreferrer" class="block">
+                            <div class="aspect-video w-full bg-sky/20 overflow-hidden relative border-b-4 border-sky/10">
+                                {work.thumbnail ? (
+                                    <img 
+                                        src={work.thumbnail.url} 
+                                        alt={work.title} 
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <div class="w-full h-full flex items-center justify-center text-choco/30 font-bold pixelated text-4xl">
+                                        NO IMAGE
+                                    </div>
+                                )}
+                            </div>
+                            <div class="p-4">
+                                <h2 class="text-xl font-bold text-choco mb-2 line-clamp-1">{work.title}</h2>
+                                {work.tags && (
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        {work.tags.split('\n').map((tag) => (
+                                            <span class="text-xs px-2 py-1 bg-sky/10 text-choco/80 rounded border border-sky/20">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </a>
+                    </article>
+                ))}
+            </div>
+        )}
+
+        <div class="mt-12 text-center">
+            <a href="/" class="inline-block px-6 py-2 bg-choco text-white rounded hover:bg-choco/90 transition-colors">
+                ← Back to Top
+            </a>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    /* Cloud Animations */
+    @keyframes float {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(30px); }
+        100% { transform: translateX(0); }
+    }
+    .animate-float-slow { animation: float 8s ease-in-out infinite; }
+    .animate-float-medium { animation: float 6s ease-in-out infinite reverse; }
+
+    .cloud::before, .cloud::after {
+        content: '';
+        position: absolute;
+        background: inherit;
+        border-radius: 50%;
+    }
+    .cloud::before { width: 50%; height: 150%; top: -50%; left: 15%; }
+    .cloud::after { width: 50%; height: 120%; top: -40%; right: 15%; }
+</style>

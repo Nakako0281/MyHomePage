@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --font-pixel: "DotGothic16", sans-serif;
+
+  --color-sky: #87CEFA;
+  --color-cloud: #FFFFFF;
+  --color-choco: #4A2C2A;
+  --color-accent: #FF6B6B;
+  --color-gold: #FFD700;
+}
+
+@layer base {
+  html {
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply font-pixel bg-sky text-choco overflow-x-hidden;
+  }
+}

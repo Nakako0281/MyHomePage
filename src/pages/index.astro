@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Typewriter } from '../components/Typewriter';
+---
+
+<Layout>
+    <!-- Clouds Background -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="cloud absolute top-10 opacity-80 animate-float-1"></div>
+        <div class="cloud absolute top-32 opacity-60 animate-float-2"></div>
+        <div class="cloud absolute top-20 opacity-90 animate-float-3"></div>
+        <div class="cloud absolute top-40 opacity-70 animate-float-4"></div>
+        <div class="cloud absolute top-12 opacity-50 animate-float-5"></div>
+    </div>
+
+	<main class="flex flex-col items-center justify-center min-h-screen p-4 text-center relative z-10">
+            <!-- Main Character: Standing (Removed) -->
+
+		<div class="bg-white/40 p-8 rounded-xl border-4 border-white shadow-lg backdrop-blur-md max-w-2xl w-full mx-4">
+            <h1 class="text-4xl md:text-6xl mb-4 text-choco drop-shadow-sm font-bold tracking-wider">
+				Nakako's Portfolio
+			</h1>
+			<p class="text-xl md:text-2xl mb-8 text-choco/70 font-bold h-8">
+				<Typewriter client:load text="Freelance Engineer in Sapporo" speed={100} delay={500} />
+			</p>
+			
+			<div class="flex gap-4 justify-center">
+				<a href="/works" class="px-8 py-3 bg-accent text-white text-xl rounded-lg border-b-4 border-red-700 active:border-b-0 active:translate-y-1 transition-all hover:bg-accent/90 shadow-md">
+					View Works
+				</a>
+			</div>
+		</div>
+
+        <!-- Running Character Animation -->
+        <div class="absolute bottom-10 w-24 md:w-32 animate-run-across opacity-90 z-20">
+             <img src="/nakako-running.png" alt="Running Nakako" class="w-full object-contain pixelated scale-x-[-1]" />
+        </div>
+	</main>
+
+<style>
+    /* Cloud Animations */
+    /* Use negative delays to ensure clouds are scattered across the screen on load */
+    .cloud {
+        width: 120px;
+        height: 60px;
+        background: white;
+        border-radius: 50px;
+        position: absolute;
+        left: -150px; /* Start off-screen left */
+    }
+    
+    .cloud::before, .cloud::after {
+        content: '';
+        position: absolute;
+        background: inherit;
+        border-radius: 50%;
+    }
+    .cloud::before { width: 50%; height: 150%; top: -50%; left: 15%; }
+    .cloud::after { width: 50%; height: 120%; top: -40%; right: 15%; }
+
+    @keyframes float-right {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(120vw); }
+    }
+
+    .animate-float-1 { animation: float-right 35s linear infinite; animation-delay: -5s; top: 10%; transform: scale(1.2); }
+    .animate-float-2 { animation: float-right 45s linear infinite; animation-delay: -25s; top: 25%; transform: scale(0.8); }
+    .animate-float-3 { animation: float-right 40s linear infinite; animation-delay: -15s; top: 15%; transform: scale(1.0); }
+    .animate-float-4 { animation: float-right 50s linear infinite; animation-delay: -40s; top: 5%; transform: scale(0.6); }
+    .animate-float-5 { animation: float-right 30s linear infinite; animation-delay: -10s; top: 30%; transform: scale(0.9); }
+
+    /* Character Bounce (Removed for simplicity in this version, or kept if needed for other elements) */
+    @keyframes bounce-soft {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    .animate-bounce-soft { animation: bounce-soft 2s ease-in-out infinite; }
+
+    /* Running Animation */
+    @keyframes run-across {
+        0% { transform: translateX(-20vw); }
+        100% { transform: translateX(120vw); }
+    }
+    .animate-run-across {
+        left: 0; /* Anchor specifically to the left edge */
+        animation: run-across 15s linear infinite;
+        will-change: transform; /* Hint for browser optimization */
+        /* z-index is handled in utility class */
+    }
+</style>
